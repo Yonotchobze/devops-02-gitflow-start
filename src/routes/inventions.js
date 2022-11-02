@@ -1,6 +1,7 @@
 const express = require("express");
 const Inventions = require('../models/Invention');
 const keyToUpperCase = require('../services/keyToUpperCase');
+const sortInventions = require('../services/sortInventions');
 
 const router = express.Router();
 
@@ -15,19 +16,8 @@ router.get('/inventions/:key?', (req, res) => {
 	});
 });
 
-router.get('/inventions/sort/asc', (req, res) => {
-	const inventions = Inventions.list().sort(function(a, b) {return a.creationDate - b.creationDate});
-	res.send({ 
-		inventions, 
-		sources: [
-			'https://www.thoughtco.com/20th-century-timeline-1992486',
-			'https://en.wikipedia.org/wiki',
-		] 
-	});
-});
-
-router.get('/inventions/sort/desc', (req, res) => {
-	const inventions = Inventions.list().sort(function(a, b) {return b.creationDate - a.creationDate});
+router.get('/inventions/sort/:order', (req, res) => {
+	const inventions = sortInventions(Inventions.list(), req.params.order);
 	res.send({ 
 		inventions, 
 		sources: [
