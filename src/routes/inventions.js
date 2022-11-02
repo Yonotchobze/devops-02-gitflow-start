@@ -15,4 +15,15 @@ router.get('/inventions/:key?', (req, res) => {
 	});
 });
 
+router.get('/inventions/sort/desc', (req, res) => {
+	const inventions = Inventions.list().sort(function(a, b) {return b.creationDate - a.creationDate});
+	res.send({ 
+		inventions, 
+		sources: [
+			'https://www.thoughtco.com/20th-century-timeline-1992486',
+			'https://en.wikipedia.org/wiki',
+		] 
+	});
+});
+
 module.exports = router;
